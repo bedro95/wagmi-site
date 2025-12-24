@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { motion } from 'framer-motion';
-import { Search, Terminal, Zap, ShieldCheck } from 'lucide-react';
+import { Search, Terminal, Zap, ShieldCheck, Activity } from 'lucide-react';
 
 export default function WagmiCyberpunkFinal() {
   const [address, setAddress] = useState('');
@@ -10,24 +10,33 @@ export default function WagmiCyberpunkFinal() {
   const [loading, setLoading] = useState(false);
 
   const checkBalance = async () => {
-    if (!address) return;
-    setLoading(true);
-    try {
-      const connection = new Connection(clusterApiUrl('mainnet-beta'));
-      const key = new PublicKey(address);
-      const bal = await connection.getBalance(key);
-      setBalance(bal / 1000000000); 
-    } catch (err) {
-      alert("Invalid Neural Link / Address");
-      setBalance(null);
+    if (!address) {
+      alert("Please enter a wallet address");
+      return;
     }
-    setLoading(false);
+    
+    setLoading(true);
+    setBalance(null);
+
+    try {
+      // الاتصال بالشبكة الحقيقية
+      const connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
+      const key = new PublicKey(address.trim());
+      const bal = await connection.getBalance(key);
+      
+      setBalance(bal / 1000000000); // تحويل القيمة إلى SOL
+    } catch (err: any) {
+      console.error("Analysis Error:", err);
+      alert("Error: Invalid Address or Network Timeout");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="relative min-h-screen bg-[#050505] text-white overflow-hidden flex flex-col items-center justify-center p-4 font-sans">
       
-      {/* Cyberpunk Background - Digital Rain Effect */}
+      {/* Background - Digital Rain */}
       <div className="absolute inset-0 z-0 opacity-20">
         {[...Array(25)].map((_, i) => (
           <motion.div
@@ -46,7 +55,6 @@ export default function WagmiCyberpunkFinal() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 bg-black/80 backdrop-blur-3xl p-10 rounded-none border-l-4 border-t-4 border-cyan-500 shadow-[20px_20px_0px_0px_rgba(6,182,212,0.1)] w-full max-w-md"
       >
-        {/* Logo Section - Clean WAGMI */}
         <div className="flex flex-col items-center mb-12">
           <h1 className="text-6xl font-black tracking-[0.25em] text-cyan-400 drop-shadow-[0_0_20px_rgba(34,211,238,0.6)] italic">
             WAGMI
@@ -89,20 +97,15 @@ export default function WagmiCyberpunkFinal() {
               <div className="absolute top-0 right-0 p-1 bg-purple-500 text-[8px] text-black font-bold">DATA_RETRIEVED</div>
               <p className="text-gray-500 text-[10px] font-mono mb-2 tracking-tighter">SOLANA_MAINNET_ASSETS:</p>
               <h2 className="text-5xl font-black text-white italic">
-                {balance.toFixed(3)} <span className="text-sm text-cyan-400">SOL</span>
+                {balance.toLocaleString()} <span className="text-sm text-cyan-400">SOL</span>
               </h2>
             </motion.div>
           )}
         </div>
       </motion.div>
 
-      {/* Footer Info with Signature */}
+      {/* Footer */}
       <div className="mt-12 flex flex-col items-center gap-4 opacity-60">
-        <div className="flex gap-8 mb-2">
-           <ShieldCheck size={18} className="text-cyan-500" />
-           <div className="w-[1px] h-4 bg-gray-800"></div>
-           <Zap size={18} className="text-purple-500" />
-        </div>
         <p className="text-[11px] font-mono tracking-[0.3em] text-cyan-400 uppercase font-bold">
           Powered by Bader Alkorgli
         </p>
