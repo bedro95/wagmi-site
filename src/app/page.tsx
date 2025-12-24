@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Twitter, Share2, Shield, Target, Award } from 'lucide-react';
+import { Zap, Twitter, Share2, Shield, Target, Award, ArrowRight } from 'lucide-react';
 
-export default function WagmiCTEdition() {
+export default function WagmiArtisticEdition() {
   const [address, setAddress] = useState('');
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ export default function WagmiCTEdition() {
 
       const totalTokens = tokenAccounts.value.length;
       const isProfitable = solAmount > 1 || totalTokens > 10;
-      const winRate = isProfitable ? (82 + Math.random() * 15).toFixed(1) : (45 + Math.random() * 15).toFixed(1);
+      const winRate = isProfitable ? (85 + Math.random() * 12).toFixed(1) : (40 + Math.random() * 20).toFixed(1);
 
       setData({
         sol: solAmount,
@@ -40,126 +40,116 @@ export default function WagmiCTEdition() {
       });
 
     } catch (err) {
-      alert("Address decryption failed. Check your input.");
+      alert("Address not found on Solana Mainnet.");
     } finally {
       setLoading(false);
     }
   };
 
   const shareOnX = () => {
-    const text = `🚨 WAGMI ANALYSIS REPORT 🚨\n\nRank: ${data.rank}\nWin Rate: ${data.winRate}%\nAssets: ${data.tokens} Tokens\n\nAnalyzed via @WagmiTerminal\n#Solana #WAGMI`;
+    const text = `Verified my Solana ID on WAGMI Terminal ⚡\n\nRank: ${data.rank}\nWin Rate: ${data.winRate}%\nAssets: ${data.tokens} Tokens\n\nCheck yours here:`;
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, '_blank');
   };
 
   return (
-    <div className="relative min-h-screen bg-[#000] text-white flex flex-col items-center justify-center p-6 font-sans">
+    <div className="relative min-h-screen bg-[#020202] text-white flex flex-col items-center py-12 px-6 font-sans overflow-hidden">
       
-      {/* Matrix Background Effect */}
-      <div className="absolute inset-0 z-0 overflow-hidden opacity-20 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ y: -1000 }}
-            animate={{ y: 1000 }}
-            transition={{ duration: Math.random() * 10 + 5, repeat: Infinity, ease: "linear" }}
-            className="absolute text-[10px] font-mono text-cyan-500 whitespace-nowrap"
-            style={{ left: `${i * 7}%` }}
-          >
-            {Array(50).fill("WAGMI").join(" ")}
-          </motion.div>
-        ))}
-      </div>
+      {/* Abstract Background Art */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-600/20 blur-[120px] rounded-full" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/20 blur-[120px] rounded-full" />
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-10 w-full max-w-lg">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 w-full max-w-xl">
         
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-6xl font-black italic tracking-tighter text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">WAGMI</h1>
-          <p className="text-[10px] tracking-[0.6em] text-cyan-500 font-bold uppercase mt-2">Neural Terminal v4.0</p>
+        {/* Logo */}
+        <div className="text-center mb-12">
+          <h1 className="text-7xl font-black tracking-tighter italic text-white drop-shadow-2xl">WAGMI</h1>
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <div className="h-[1px] w-8 bg-cyan-500" />
+            <p className="text-[10px] tracking-[0.5em] text-cyan-400 font-bold uppercase">Neural Terminal v5.0</p>
+            <div className="h-[1px] w-8 bg-cyan-500" />
+          </div>
         </div>
 
-        {/* Search Box */}
-        <div className="relative mb-12 group">
-          <input 
-            className="w-full bg-transparent border-b-2 border-white/20 p-4 text-center text-xl font-mono outline-none focus:border-cyan-500 transition-all uppercase placeholder:text-gray-800"
-            placeholder="INPUT_SOL_ADDRESS"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
+        {/* Input & Modern Button */}
+        <div className="flex flex-col gap-4 mb-16">
+          <div className="relative group">
+            <input 
+              className="w-full bg-white/5 border border-white/10 p-6 rounded-2xl text-center text-lg font-mono outline-none focus:border-cyan-500/50 transition-all uppercase backdrop-blur-md"
+              placeholder="PASTE_WALLET_ADDRESS"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
           <button 
             onClick={analyzeWallet}
-            className="absolute right-0 bottom-4 text-cyan-500 hover:text-white transition-colors"
+            disabled={loading}
+            className="w-full bg-cyan-500 hover:bg-white text-black h-16 rounded-2xl font-black uppercase tracking-widest transition-all duration-500 flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(6,182,212,0.4)] group"
           >
-            {loading ? "..." : <Zap size={24} fill="currentColor" />}
+            {loading ? "DECRYPTING..." : (
+              <>
+                START DEEP ANALYSIS <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+              </>
+            )}
           </button>
         </div>
 
         <AnimatePresence>
           {data && (
             <motion.div 
-              initial={{ y: 100, opacity: 0, rotateX: 45 }}
-              animate={{ y: 0, opacity: 1, rotateX: 0 }}
-              className="relative bg-gradient-to-br from-[#111] to-[#000] border-2 border-white/10 p-1 shadow-[0_30px_60px_rgba(0,0,0,1)]"
+              initial={{ scale: 0.8, opacity: 0, y: 40 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              className="relative p-[2px] rounded-[2.5rem] bg-gradient-to-br from-cyan-400 via-purple-500 to-blue-600 shadow-[0_40px_80px_rgba(0,0,0,0.8)]"
             >
-              {/* The Actual Card Design */}
-              <div className="border border-white/5 p-8 relative">
+              {/* Artistic Card Content */}
+              <div className="bg-[#080808] rounded-[2.4rem] p-10 relative overflow-hidden">
                 
-                {/* Status Bar */}
-                <div className="flex justify-between items-center mb-10">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-cyan-500 rounded-full animate-pulse" />
-                    <span className="text-[9px] font-mono text-cyan-500 tracking-widest uppercase">Identity: {data.address}</span>
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 p-6 opacity-20">
+                    <Award size={80} />
+                </div>
+
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="px-3 py-1 bg-white/10 rounded-full border border-white/10">
+                        <span className="text-[9px] font-mono text-gray-400">ID: {data.address}</span>
+                    </div>
                   </div>
-                  <Shield size={16} className="text-white/20" />
-                </div>
 
-                <div className="flex flex-col items-center text-center mb-10">
-                   <p className="text-[10px] font-mono text-gray-500 uppercase tracking-[0.3em] mb-2">Portfolio Ranking</p>
-                   <h2 className="text-5xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-2">
-                     {data.rank}
-                   </h2>
-                   <div className="px-4 py-1 bg-cyan-500 text-black text-[10px] font-black uppercase tracking-tighter">
-                     Win Rate: {data.winRate}%
-                   </div>
-                </div>
+                  <p className="text-[10px] font-mono text-cyan-500 uppercase tracking-[0.4em] mb-3">Portfolio Class</p>
+                  <h2 className="text-6xl font-black italic tracking-tighter text-white mb-6">
+                    {data.rank}
+                  </h2>
 
-                <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-8">
-                    <div className="text-left border-r border-white/10">
-                        <p className="text-[8px] font-mono text-gray-600 uppercase mb-1">Total Assets</p>
-                        <p className="text-xl font-black">{data.tokens} <span className="text-[10px] text-gray-500">Tokens</span></p>
+                  <div className="grid grid-cols-2 gap-6 pt-8 border-t border-white/5">
+                    <div>
+                        <p className="text-[9px] font-mono text-gray-500 uppercase mb-1 italic">Win Rate</p>
+                        <p className="text-3xl font-black text-cyan-400">{data.winRate}%</p>
                     </div>
-                    <div className="text-right pl-4">
-                        <p className="text-[8px] font-mono text-gray-600 uppercase mb-1">Net Worth</p>
-                        <p className="text-xl font-black text-cyan-400">{data.sol.toFixed(2)} <span className="text-[10px]">SOL</span></p>
+                    <div>
+                        <p className="text-[9px] font-mono text-gray-500 uppercase mb-1 italic">Net Value</p>
+                        <p className="text-3xl font-black text-white">{data.sol.toFixed(2)} <span className="text-sm font-light opacity-50">SOL</span></p>
                     </div>
-                </div>
+                  </div>
 
-                {/* Cyber Decorations */}
-                <div className="absolute bottom-2 right-2 opacity-10">
-                    <Award size={40} />
+                  {/* X-Button Inside Card */}
+                  <button 
+                    onClick={shareOnX}
+                    className="mt-10 w-full bg-white/5 hover:bg-white hover:text-black border border-white/10 py-4 rounded-xl flex items-center justify-center gap-3 transition-all font-bold text-xs uppercase tracking-widest"
+                  >
+                    <Twitter size={16} fill="currentColor" /> Share on Crypto Twitter
+                  </button>
                 </div>
-              </div>
-
-              {/* Share Buttons */}
-              <div className="flex border-t border-white/10 bg-white/5">
-                 <button 
-                   onClick={shareOnX}
-                   className="flex-1 p-4 flex items-center justify-center gap-2 hover:bg-white hover:text-black transition-all font-black text-[10px] uppercase tracking-widest"
-                 >
-                   <Twitter size={14} fill="currentColor" /> Share on X
-                 </button>
-                 <button className="p-4 border-l border-white/10 hover:bg-cyan-500 hover:text-black transition-all">
-                    <Share2 size={16} />
-                 </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <p className="text-center text-[9px] font-mono text-gray-700 mt-12 tracking-[0.5em] uppercase">
-          Powered by <span className="text-white">Bader Alkorgli</span> // Global Node v4.1
-        </p>
+        <div className="mt-20 text-center">
+          <p className="text-[10px] font-mono tracking-[0.5em] text-gray-600 font-bold uppercase">
+            Designed by <span className="text-white">Bader Alkorgli</span> // Global Release 5.0
+          </p>
+        </div>
       </motion.div>
     </div>
   );
