@@ -1,40 +1,40 @@
 "use client";
 import React, { useState } from 'react';
-import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { Connection, PublicKey } from '@solana/web3.js';
 import { motion } from 'framer-motion';
-import { Search, Terminal, Zap, ShieldCheck, Activity } from 'lucide-react';
+import { Search, Terminal, Zap, ShieldCheck } from 'lucide-react';
 
 export default function WagmiCyberpunkFinal() {
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // الرابط الخاص بك من Helius
+  const HELIUS_RPC = "https://mainnet.helius-rpc.com/?api-key=4729436b-2f9d-4d42-a307-e2a3b2449483";
+
   const checkBalance = async () => {
-    if (!address) {
-      alert("Please enter a wallet address");
-      return;
-    }
+    if (!address) return;
     
     setLoading(true);
     setBalance(null);
 
     try {
-      // الاتصال بالشبكة الحقيقية
-      const connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
+      // الاتصال عبر Helius RPC
+      const connection = new Connection(HELIUS_RPC, 'confirmed');
       const key = new PublicKey(address.trim());
       const bal = await connection.getBalance(key);
       
-      setBalance(bal / 1000000000); // تحويل القيمة إلى SOL
+      setBalance(bal / 1000000000); 
     } catch (err: any) {
-      console.error("Analysis Error:", err);
-      alert("Error: Invalid Address or Network Timeout");
+      console.error("RPC Error:", err);
+      alert("Neural Link Failed: Invalid Address or RPC Timeout");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-[#050505] text-white overflow-hidden flex flex-col items-center justify-center p-4 font-sans">
+    <div className="relative min-h-screen bg-[#050505] text-white overflow-hidden flex flex-col items-center justify-center p-4 font-sans text-center">
       
       {/* Background - Digital Rain */}
       <div className="absolute inset-0 z-0 opacity-20">
@@ -66,7 +66,7 @@ export default function WagmiCyberpunkFinal() {
         <div className="space-y-6">
           <div className="relative group">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-none blur opacity-20 group-hover:opacity-100 transition duration-1000"></div>
-            <div className="relative">
+            <div className="relative text-left">
               <input 
                 type="text"
                 placeholder="INPUT_WALLET_ADDRESS"
@@ -84,7 +84,7 @@ export default function WagmiCyberpunkFinal() {
             className="group relative w-full h-14 bg-cyan-500 hover:bg-white text-black font-black uppercase tracking-widest text-sm transition-all duration-300 shadow-[5px_5px_0px_0px_#7c3aed]"
           >
             <span className="flex items-center justify-center gap-2">
-              {loading ? "Decrypting..." : "Run Analysis"} <Zap size={16} />
+              {loading ? "DECRYPTING..." : "RUN ANALYSIS"} <Zap size={16} />
             </span>
           </button>
 
@@ -92,12 +92,12 @@ export default function WagmiCyberpunkFinal() {
             <motion.div 
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="mt-8 p-6 border-l-2 border-purple-500 bg-purple-500/5 relative overflow-hidden"
+              className="mt-8 p-6 border-l-2 border-purple-500 bg-purple-500/5 relative overflow-hidden text-left"
             >
               <div className="absolute top-0 right-0 p-1 bg-purple-500 text-[8px] text-black font-bold">DATA_RETRIEVED</div>
-              <p className="text-gray-500 text-[10px] font-mono mb-2 tracking-tighter">SOLANA_MAINNET_ASSETS:</p>
+              <p className="text-gray-500 text-[10px] font-mono mb-2 tracking-tighter uppercase">Solana_Mainnet_Assets:</p>
               <h2 className="text-5xl font-black text-white italic">
-                {balance.toLocaleString()} <span className="text-sm text-cyan-400">SOL</span>
+                {balance.toLocaleString(undefined, { maximumFractionDigits: 3 })} <span className="text-sm text-cyan-400">SOL</span>
               </h2>
             </motion.div>
           )}
@@ -109,7 +109,10 @@ export default function WagmiCyberpunkFinal() {
         <p className="text-[11px] font-mono tracking-[0.3em] text-cyan-400 uppercase font-bold">
           Powered by Bader Alkorgli
         </p>
-        <p className="text-[8px] font-mono tracking-widest text-gray-600 uppercase italic">Established 2025 // System: Secure</p>
+        <div className="flex gap-4">
+           <ShieldCheck size={14} className="text-gray-600" />
+           <p className="text-[8px] font-mono tracking-widest text-gray-600 uppercase italic">Established 2025 // Helius_Node_Online</p>
+        </div>
       </div>
     </div>
   );
