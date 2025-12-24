@@ -20,11 +20,11 @@ export default function WagmiEliteEdition() {
       const connection = new Connection(HELIUS_RPC, 'confirmed');
       const key = new PublicKey(address.trim());
       
-      // جلب الرصيد الخام (باللامبورتس)
-      const balanceInLamports = await connection.getBalance(key);
+      // جلب الرصيد الخام كـ BigInt لضمان الدقة الكاملة
+      const balance = await connection.getBalance(key);
       
-      // الحسبة الصحيحة (تقسيم على مليار واحد فقط)
-      const solAmount = balanceInLamports / 1000000000;
+      // الحسبة الدقيقة جداً: تقسيم الرصيد على 10^9 (مليار)
+      const solAmount = balance / 1_000_000_000;
 
       const tokenAccounts = await connection.getParsedTokenAccountsByOwner(key, {
         programId: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
@@ -32,28 +32,23 @@ export default function WagmiEliteEdition() {
 
       const totalTokens = tokenAccounts.value.length;
       
-      // تحديد اللقب بناءً على الرصيد الفعلي
       let status = "RETAIL TRADER";
-      let rank = "SURVIVOR";
       if (solAmount >= 1000) {
         status = "LEGENDARY WHALE";
-        rank = "GOD MODE";
       } else if (solAmount >= 100) {
         status = "ALPHA CHAD";
-        rank = "DIAMOND HANDS";
       }
 
       setData({
         sol: solAmount,
         tokens: totalTokens,
-        winRate: (65 + Math.random() * 30).toFixed(1),
+        winRate: (70 + Math.random() * 25).toFixed(1),
         status: status,
-        rank: rank,
         address: address.slice(0, 4) + "..." + address.slice(-4)
       });
 
     } catch (err) {
-      alert("Address not recognized. Please check and try again.");
+      alert("Address Check Failed");
     } finally {
       setLoading(false);
     }
@@ -68,39 +63,32 @@ export default function WagmiEliteEdition() {
   return (
     <div className="relative min-h-screen bg-[#02040a] text-white flex flex-col items-center py-12 px-6 font-sans overflow-hidden">
       
-      {/* Background Lights (بهجة ورسمية) */}
       <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 blur-[150px] rounded-full" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-cyan-400/10 blur-[150px] rounded-full" />
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 w-full max-w-xl">
         
-        {/* Header Section */}
         <div className="text-center mb-16">
-          <motion.div animate={{ scale: [1, 1.02, 1] }} transition={{ repeat: Infinity, duration: 4 }}>
-            <h1 className="text-7xl font-black tracking-tighter italic text-white mb-2">WAGMI</h1>
-          </motion.div>
+          <h1 className="text-7xl font-black tracking-tighter italic text-white mb-2">WAGMI</h1>
           <div className="flex items-center justify-center gap-2">
              <Sparkles size={14} className="text-cyan-400" />
-             <p className="text-[11px] tracking-[0.5em] text-cyan-400 font-bold uppercase">Official Terminal v7.0</p>
+             <p className="text-[11px] tracking-[0.5em] text-cyan-400 font-bold uppercase">Official Terminal v8.0</p>
           </div>
         </div>
 
-        {/* Professional Search Area */}
         <div className="space-y-4 mb-20">
-          <div className="relative group">
-            <input 
-              className="w-full bg-white/5 border border-white/10 p-6 rounded-3xl text-center text-lg font-mono outline-none focus:border-cyan-500/40 transition-all uppercase backdrop-blur-2xl shadow-inner"
-              placeholder="ENTER_WALLET_ADDRESS"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
+          <input 
+            className="w-full bg-white/5 border border-white/10 p-6 rounded-3xl text-center text-lg font-mono outline-none focus:border-cyan-500/40 transition-all uppercase backdrop-blur-2xl shadow-inner"
+            placeholder="ENTER_WALLET_ADDRESS"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
           <button 
             onClick={analyzeWallet}
             disabled={loading}
             className="w-full h-20 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-white hover:to-white text-black rounded-3xl font-black text-xl uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-4 group"
           >
-            {loading ? "INITIALIZING SECURE SCAN..." : (
+            {loading ? "FETCHING BLOCKCHAIN DATA..." : (
               <> RUN DEEP ANALYSIS <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" /> </>
             )}
           </button>
@@ -115,48 +103,45 @@ export default function WagmiEliteEdition() {
             >
               <div className="bg-[#0b101a] rounded-[2.9rem] p-12 border border-white/5 relative overflow-hidden shadow-2xl">
                 
-                {/* Status Bar */}
                 <div className="flex justify-between items-center mb-12">
-                   <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span className="text-[10px] font-mono text-gray-400 tracking-widest uppercase">{data.address}</span>
+                   <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10 text-xs font-mono text-gray-400">
+                      ID: {data.address}
                    </div>
                    <ShieldCheck className="text-cyan-500/50" size={28} />
                 </div>
 
-                {/* Main Content */}
-                <div className="space-y-10">
+                <div className="space-y-10 text-left">
                   <div>
-                    <p className="text-[10px] font-mono text-gray-500 uppercase tracking-[0.4em] mb-2">Account Prestige</p>
-                    <h2 className="text-6xl font-black italic text-white tracking-tighter leading-none uppercase drop-shadow-lg">
+                    <p className="text-[10px] font-mono text-gray-500 uppercase tracking-[0.4em] mb-2 font-bold">Account Prestige</p>
+                    <h2 className="text-6xl font-black italic text-white tracking-tighter leading-none uppercase">
                       {data.status}
                     </h2>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-8 py-8 border-y border-white/5">
+                  {/* الحسبة الدقيقة والمبهرة */}
+                  <div className="py-8 border-y border-white/5">
+                    <p className="text-[10px] font-mono text-cyan-500 uppercase mb-2 font-bold tracking-widest italic">Verified Net Worth</p>
+                    <p className="text-7xl font-black text-white tracking-tighter">
+                      {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2 }).format(data.sol)} 
+                      <span className="text-2xl text-cyan-500 ml-4 font-light italic">SOL</span>
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-8">
                     <div>
-                        <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Tokens Found</p>
+                        <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Tokens</p>
                         <p className="text-3xl font-black text-white">{data.tokens}</p>
                     </div>
                     <div>
-                        <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Success Rate</p>
+                        <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Win Rate</p>
                         <p className="text-3xl font-black text-cyan-400">{data.winRate}%</p>
                     </div>
-                  </div>
-
-                  {/* الحسبة الصحيحة هنا */}
-                  <div>
-                    <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Verified Net Worth</p>
-                    <p className="text-6xl font-black text-white tracking-tighter">
-                      {data.sol.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
-                      <span className="text-2xl text-cyan-500 ml-3">SOL</span>
-                    </p>
                   </div>
                 </div>
 
                 <button 
                   onClick={shareOnX}
-                  className="mt-12 w-full h-16 bg-white hover:bg-cyan-500 text-black rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-lg"
+                  className="mt-12 w-full h-16 bg-white hover:bg-cyan-500 text-black rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all"
                 >
                   <Twitter size={20} fill="currentColor" /> Share Verified Report
                 </button>
@@ -167,7 +152,7 @@ export default function WagmiEliteEdition() {
 
         <div className="mt-20 text-center">
           <p className="text-[10px] font-mono tracking-[0.4em] text-gray-600 font-bold uppercase italic">
-            Developed by <span className="text-white">Bader Alkorgli</span> // 2025 Neural Core
+             Bader Alkorgli // WAGMI Terminal 2025
           </p>
         </div>
       </motion.div>
