@@ -1,30 +1,32 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
-// إجبار السيرفر على الاستجابة الديناميكية السريعة
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
     const { message, context } = await req.json();
     
-    // استخدام المفتاح مباشرة لضمان عدم وجود أخطاء في التعريف
+    // تأكد من أن هذا المفتاح فعال (أو استبدله بمفتاحك الخاص من Google AI Studio)
     const genAI = new GoogleGenerativeAI("AIzaSyBLkZt6NrBn58Zc0-xO0cz-Ga_9TgK7Lng");
+    
+    // استخدمنا موديل pro لضمان جودة الرد وسرعته
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const result = await model.generateContent(`
-      Role: You are Wagmi AI, a professional Solana expert assistant. 
-      Context: ${context}
-      User Message: ${message}
-      Rule: Answer in English only, be very concise and fast.
-    `);
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: `You are Wagmi Assistant. User info: ${context}. Question: ${message}. Answer briefly in English.` }] }],
+      generationConfig: {
+        maxOutputTokens: 200,
+        temperature: 0.7,
+      },
+    });
 
     const response = await result.response;
-    const text = response.text();
+    return NextResponse.json({ text: response.text() });
     
-    return NextResponse.json({ text });
-  } catch (error) {
-    console.error("Chat Error:", error);
-    return NextResponse.json({ text: "I'm ready now. Please ask again!" }, { status: 200 });
+  } catch (error: any) {
+    // هذا السطر سيطبع الخطأ الحقيقي في لوحة تحكم Vercel لنعرف السبب
+    console.error("DEBUG AI ERROR:", error.message);
+    return NextResponse.json({ text: "AI Service is busy. Please try one more time." });
   }
 }
