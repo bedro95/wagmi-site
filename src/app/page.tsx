@@ -2,10 +2,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, Radio, ShieldCheck, Fingerprint, Volume2, VolumeX, Github, Bot, Sparkles } from 'lucide-react';
+import { Download, Radio, ShieldCheck, Fingerprint, Volume2, VolumeX, Github, Cpu, Box, Zap } from 'lucide-react';
 import { toPng } from 'html-to-image';
 
-export default function WagmiAIAgentEdition() {
+export default function WagmiCyberAgent() {
   const [address, setAddress] = useState('');
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -71,38 +71,43 @@ export default function WagmiAIAgentEdition() {
   return (
     <div className="min-h-screen bg-[#000] text-white flex flex-col items-center p-4 md:p-10 font-sans overflow-x-hidden relative selection:bg-cyan-500">
       
-      {/* AI AGENT - SENKU MASCOT */}
-      <div className="fixed top-10 left-10 z-40 hidden lg:block">
-        <motion.div 
-          animate={loading ? { scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] } : { y: [0, -10, 0] }}
-          transition={{ duration: loading ? 0.5 : 3, repeat: Infinity }}
-          className="relative group"
-        >
-          {/* Radar Circles */}
-          <div className="absolute inset-0 border border-cyan-500/20 rounded-full animate-ping scale-150" />
-          <div className="absolute inset-0 border border-purple-500/10 rounded-full animate-pulse scale-[2]" />
+      {/* --- ADVANCED CYBERNETIC AI AGENT --- */}
+      <div className="fixed top-12 left-12 z-50 hidden lg:block">
+        <div className="relative flex flex-col items-center">
+          {/* Outer Ring */}
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            className="absolute w-32 h-32 border-t-2 border-b-2 border-cyan-500/30 rounded-full"
+          />
           
-          <div className="relative w-32 h-32 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden">
-            <img 
-               src="https://raw.githubusercontent.com/bedro95/assets/main/senku-avatar.png" // تأكد من رفع صورة هنا أو سيعرض الأيقونة
-               alt="AI Agent"
-               onError={(e) => { e.currentTarget.style.display = 'none' }} // إذا فشل الرابط لا يظهر خطأ
-               className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-            />
-            {/* Fallback Icon if Image Fails */}
-            <Bot size={40} className="absolute text-cyan-400 group-hover:text-white transition-colors" />
+          {/* AI Core Structure */}
+          <motion.div 
+            animate={loading ? { scale: [1, 1.2, 1], rotate: [0, 90, 180, 270, 360] } : { y: [0, -10, 0] }}
+            transition={{ duration: loading ? 1 : 4, repeat: Infinity }}
+            className="w-24 h-24 bg-gradient-to-br from-black to-cyan-900/40 rounded-3xl border border-cyan-400/50 shadow-[0_0_30px_rgba(6,182,212,0.3)] flex items-center justify-center relative backdrop-blur-xl"
+          >
+            <Cpu size={40} className={`transition-colors duration-500 ${loading ? 'text-purple-400' : 'text-cyan-400'}`} />
             
-            {/* Scanning Light Effect */}
-            <motion.div 
-              animate={{ top: ["-100%", "200%"] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="absolute left-0 right-0 h-[2px] bg-cyan-400/50 shadow-[0_0_15px_#06b6d4]"
-            />
+            {/* Spinning Particles around Core */}
+            {[...Array(4)].map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2 + i, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0"
+              >
+                <div className="w-2 h-2 bg-white rounded-full absolute -top-1 left-1/2 -translate-x-1/2 shadow-[0_0_10px_#fff]" />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <div className="mt-6 bg-black/60 border border-white/5 px-4 py-1 rounded-full backdrop-blur-md">
+            <p className="text-[10px] font-mono tracking-[0.3em] text-cyan-400 uppercase">
+              {loading ? "Neural Scanning..." : "Agent Standby"}
+            </p>
           </div>
-          <div className="mt-3 text-center">
-             <p className="text-[9px] font-mono tracking-widest text-cyan-400 uppercase animate-pulse">Agent Active</p>
-          </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Audio Toggle */}
@@ -110,7 +115,7 @@ export default function WagmiAIAgentEdition() {
         {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} className="text-cyan-400" />}
       </button>
 
-      {/* --- SNOW SYSTEM --- */}
+      {/* --- FULL SCREEN SNOW SYSTEM --- */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         {[...Array(60)].map((_, i) => (
           <motion.div
@@ -130,16 +135,14 @@ export default function WagmiAIAgentEdition() {
           <h1 className="text-8xl md:text-[15rem] font-[1000] italic tracking-tighter leading-none text-white drop-shadow-[0_0_60px_rgba(255,255,255,0.2)]">
             WAGMI
           </h1>
-          <div className="mt-4 flex flex-col items-center">
-             <motion.p animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 3, repeat: Infinity }} className="text-[10px] md:text-[14px] font-mono tracking-[1.2em] text-cyan-400 uppercase font-black italic">
-               NEURAL AGENT v5.0 // COGNITIVE SCAN
-             </motion.p>
-          </div>
+          <motion.p animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 3, repeat: Infinity }} className="mt-4 text-[10px] md:text-[14px] font-mono tracking-[1.2em] text-cyan-400 uppercase font-black italic">
+               CYBERNETIC INTERFACE v5.5
+          </motion.p>
         </motion.div>
 
         {/* INPUT SECTION */}
         <div className="w-full max-w-lg mb-20 px-4 relative z-20">
-          <div className="relative p-[1px] rounded-full bg-white/10 focus-within:bg-gradient-to-r focus-within:from-cyan-500 focus-within:to-purple-600 transition-all duration-700 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
+          <div className="relative p-[1px] rounded-full bg-white/10 focus-within:bg-gradient-to-r focus-within:from-cyan-500 focus-within:to-purple-600 transition-all duration-700">
             <input 
               onMouseEnter={() => playSound(hoverSound)}
               className="w-full bg-black rounded-full p-6 text-center outline-none font-mono text-base md:text-lg text-white placeholder:text-white/20" 
@@ -152,57 +155,73 @@ export default function WagmiAIAgentEdition() {
             onMouseEnter={() => playSound(hoverSound)}
             onClick={() => { playSound(clickSound); analyze(); }} 
             disabled={loading} 
-            className="w-full mt-6 py-6 bg-white text-black rounded-full font-black uppercase text-sm md:text-lg tracking-[0.4em] hover:scale-[1.02] transition-all active:scale-95 flex items-center justify-center gap-3"
+            className="w-full mt-6 py-6 bg-white text-black rounded-full font-black uppercase text-sm md:text-lg tracking-[0.4em] hover:scale-[1.02] transition-all active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.1)]"
           >
-            {loading ? <><Sparkles className="animate-spin" /> SCANNING...</> : "AUTHORIZE SCAN"}
+            {loading ? "AUTHORIZING AGENT..." : "INITIATE SCAN"}
           </button>
         </div>
 
         <AnimatePresence>
           {data && (
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex flex-col items-center gap-12 w-full px-2 relative z-20">
-              {/* THE NEON CARD (NO CHANGES TO DESIGN) */}
-              <div className="relative w-full max-w-[620px] aspect-[1.58/1] rounded-[2.5rem] md:rounded-[3.8rem] p-[3px] overflow-hidden">
+              
+              {/* THE MASTERPIECE NEON CARD (PREVIOUS DESIGN MAINTAINED) */}
+              <div className="relative w-full max-w-[620px] aspect-[1.58/1] rounded-[2.5rem] md:rounded-[3.8rem] p-[3px] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)]">
                 <div className="absolute inset-[-500%] animate-[spin_4s_linear_infinity] bg-[conic-gradient(from_0deg,transparent,transparent,#06b6d4,#a855f7,#06b6d4,transparent,transparent)]" />
+                
                 <div ref={cardRef} className="relative w-full h-full bg-[#050505] rounded-[2.4rem] md:rounded-[3.7rem] p-8 md:p-14 overflow-hidden flex flex-col justify-between z-10">
+                  <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
+                  
+                  {/* Top Header */}
                   <div className="flex justify-between items-start relative z-20">
                     <div className="flex items-center gap-6">
-                      <div className="w-14 h-14 md:w-20 md:h-20 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+                      <div className="w-14 h-14 md:w-20 md:h-20 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
                         <Fingerprint size={32} className="md:w-11 md:h-11 text-cyan-400" />
                       </div>
                       <div className="text-left">
                         <p className="text-xl md:text-3xl font-black italic text-white uppercase tracking-tighter">Wagmi Legacy</p>
-                        <p className="text-[10px] md:text-[12px] font-mono text-white/30 tracking-[0.2em] uppercase italic">Verified Node</p>
+                        <p className="text-[10px] md:text-[12px] font-mono text-white/30 tracking-[0.2em] uppercase italic">System Verified</p>
                       </div>
                     </div>
                     <Radio className="text-cyan-500 animate-pulse w-7 h-7 md:w-10 md:h-10" />
                   </div>
+
+                  {/* Balance Section */}
                   <div className="flex items-center gap-4 text-left relative z-20">
                     <h2 className="text-6xl md:text-[7rem] font-[1000] tracking-tighter text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.4)] leading-none italic">{data.sol}</h2>
                     <span className="text-xl md:text-3xl font-black text-cyan-400 italic self-end mb-2 md:mb-4">SOL</span>
                   </div>
+
+                  {/* Bottom Info */}
                   <div className="flex justify-between items-end border-t border-white/5 pt-8 md:pt-12 relative z-20">
                     <div className="text-left">
                         <div className="flex items-center gap-2 mb-2">
                            <ShieldCheck size={14} className="text-cyan-400" />
-                           <p className="text-[9px] md:text-[11px] font-black text-cyan-400 uppercase tracking-[0.2em] italic">Access: Premium</p>
+                           <p className="text-[9px] md:text-[11px] font-black text-cyan-400 uppercase tracking-[0.2em] italic">Access: Authorized</p>
                         </div>
                         <p className="text-sm md:text-2xl font-black italic tracking-tight text-white/90 uppercase">{data.status}</p>
                     </div>
-                    <p className="text-[10px] font-mono text-white/40">ID: #{data.id}</p>
+                    <div className="text-right">
+                        <p className="text-[10px] font-mono text-white/40">NODE: {data.id}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-              <button onClick={saveCard} className="flex items-center gap-6 bg-white/5 border border-white/10 px-24 py-6 rounded-full font-black text-xs uppercase tracking-[0.8em] hover:bg-white hover:text-black transition-all mb-2">
-                EXPORT IDENTITY <Download size={20} />
+
+              <button 
+                onMouseEnter={() => playSound(hoverSound)}
+                onClick={saveCard} 
+                className="flex items-center gap-6 bg-white/5 border border-white/10 px-24 py-6 rounded-full font-black text-xs uppercase tracking-[0.8em] hover:bg-white hover:text-black transition-all mb-20 group"
+              >
+                SAVE IDENTITY <Download size={20} className="group-hover:translate-y-1 transition-transform" />
               </button>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <footer className="mt-20 pb-10 flex flex-col items-center gap-6 opacity-40 hover:opacity-100 transition-all duration-500">
-          <a href="https://github.com/bedro95" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full border border-white/10 hover:border-cyan-500 transition-all">
-                <Github size={24} />
+        <footer className="mt-10 pb-10 flex flex-col items-center gap-6 opacity-30 hover:opacity-100 transition-all duration-500">
+          <a href="https://github.com/bedro95" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full border border-white/10 hover:border-cyan-500">
+            <Github size={24} />
           </a>
           <p className="text-[10px] font-mono tracking-[1.5em] uppercase text-center">
             WAGMI PROTOCOL // <span className="text-white">Bader Alkorgli</span>
