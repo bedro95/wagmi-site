@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Radio, Cpu, ShieldCheck, Fingerprint, Volume2, VolumeX, Github } from 'lucide-react';
 import { toPng } from 'html-to-image';
 
-export default function WagmiDrStoneEdition() {
+export default function WagmiDigitalMascotEdition() {
   const [address, setAddress] = useState('');
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -71,22 +71,26 @@ export default function WagmiDrStoneEdition() {
   return (
     <div className="min-h-screen bg-[#000] text-white flex flex-col items-center p-4 md:p-10 font-sans overflow-x-hidden relative selection:bg-cyan-500">
       
-      {/* DR. STONE PERSONA (SENKU) - Desktop Only for Clean Design */}
+      {/* DR. STONE MASCOT (SENKU) - Digital Companion */}
       <motion.div 
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 0.8, x: 0 }}
-        transition={{ duration: 1.5, delay: 1 }}
-        className="fixed bottom-0 right-0 z-0 hidden lg:block pointer-events-none"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 0.8 }}
+        className="fixed top-20 left-6 z-40 hidden md:block pointer-events-none" // Adjust position as needed
       >
         <div className="relative">
-          {/* Neon Glow behind Character */}
-          <div className="absolute inset-0 bg-cyan-500/20 blur-[120px] rounded-full" />
+          {/* Subtle Pulse Glow */}
+          <motion.div 
+            animate={{ opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 to-purple-500/30 blur-2xl rounded-full"
+          />
           <motion.img 
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            src="https://www.transparentpng.com/download/dr-stone/senku-ishigami-dr-stone-png-7.png" // رابط صورة Senku (Dr. Stone)
-            alt="Senku Ishigami"
-            className="w-[450px] object-contain drop-shadow-[0_0_30px_rgba(6,182,212,0.3)] grayscale-[30%] hover:grayscale-0 transition-all duration-700"
+            animate={{ y: [0, -10, 0] }} // More subtle float for a mascot
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            src="https://www.transparentpng.com/download/dr-stone/senku-ishigami-dr-stone-png-7.png" // رابط صورة Senku
+            alt="WAGMI Digital Mascot"
+            className="w-32 h-auto object-contain drop-shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-700 hover:scale-105" // Smaller size for mascot
           />
         </div>
       </motion.div>
@@ -118,7 +122,7 @@ export default function WagmiDrStoneEdition() {
           </h1>
           <div className="mt-4 flex flex-col items-center">
              <motion.p animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 3, repeat: Infinity }} className="text-[10px] md:text-[14px] font-mono tracking-[1.2em] text-cyan-400 uppercase font-black italic">
-               NEURAL INTERFACE v4.7 // SCIENCE OVER LUCK
+               NEURAL INTERFACE v4.8 // DIGITAL GUARDIAN
              </motion.p>
              <div className="mt-2 w-32 h-[1px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
           </div>
@@ -141,7 +145,7 @@ export default function WagmiDrStoneEdition() {
             disabled={loading} 
             className="w-full mt-6 py-6 bg-white text-black rounded-full font-black uppercase text-sm md:text-lg tracking-[0.4em] hover:scale-[1.02] transition-all active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.1)]"
           >
-            {loading ? "SCANNIG FREQUENCIES..." : "AUTHORIZE SCAN"}
+            {loading ? "SCANNING FREQUENCIES..." : "AUTHORIZE SCAN"}
           </button>
         </div>
 
